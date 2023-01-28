@@ -1,0 +1,55 @@
+function create_shape_gui()
+    % Create a figure with a white background
+    f = figure('Position',[100 100 512 512],'Color','white');
+
+    % Add a dropdown menu to the figure
+    shape_menu = uicontrol('Style','popupmenu','String',{'Circle','Rectangle','Right-angle Triangle'});
+    shape_menu.Position(1:2) = [10 10];
+    shape_menu.Callback = @shape_menu_callback;
+
+    % Set up the axes object
+    ax = axes('Position',[0 0 1 1]);
+    xlim([1 512]);
+    ylim([1 512]);
+    axis off
+    colormap(gray)
+
+    function shape_menu_callback(src,event)
+        % Get the selected shape
+        val = src.Value;
+        str = src.String;
+        shape = str{val};
+
+        % Set the coordinates for the selected shape
+        switch shape
+            case 'Circle'
+                x = 256;  % x coordinate of center
+                y = 256;  % y coordinate of center
+                radius = 128;
+                t = linspace(0,2*pi,120);
+                x = x + radius*cos(t);
+                y = y + radius*sin(t);
+            case 'Rectangle'
+                x = 256;  % x coordinate of top left corner
+                y = 256;  % y coordinate of top left corner
+                width = 128;
+                height = 64;
+            case 'Right-angle Triangle'
+                x1 = 256;  % x coordinate of first vertex
+                y1 = 256;  % y coordinate of first vertex
+                x2 = 256+128;  % x coordinate of second vertex
+                y2 = 256;  % y coordinate of second vertex
+                x3 = 256;  % x coordinate of third vertex
+                y3 = 256+64;  % y coordinate of third vertex
+                x = [x1 x2 x3];
+                y = [y1 y2 y3];
+        end
+
+        % Use the "rectangle" function to draw the shape and fill it with gray
+        if strcmp(shape, 'Rectangle')
+            rectangle('Position',[x y width height],'FaceColor',[0.5 0.5 0.5])
+        else
+            fill(x,y,[0.5 0.5 0.5])
+        end
+    end
+end
